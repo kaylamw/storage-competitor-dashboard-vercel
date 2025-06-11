@@ -37,28 +37,47 @@ export default function App() {
         value={location}
         onChange={(e) => setLocation(e.target.value)}
         placeholder="Enter address, city, state or ZIP"
-        style={{ width: '100%', padding: '0.5rem', marginBottom: '0.5rem' }}
+        style={{
+          width: '100%',
+          padding: '0.75rem',
+          fontSize: '1rem',
+          marginBottom: '1rem',
+          borderRadius: '5px',
+          border: '1px solid #ccc',
+        }}
       />
 
-      <button onClick={fetchData} style={{ padding: '0.5rem 1rem' }}>
+      <button
+        onClick={fetchData}
+        style={{
+          padding: '0.75rem 1.25rem',
+          fontSize: '1rem',
+          borderRadius: '5px',
+          backgroundColor: '#007bff',
+          color: 'white',
+          border: 'none',
+          cursor: 'pointer',
+        }}
+      >
         Search
       </button>
 
-      {loading && <p>Loading...</p>}
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {loading && <p style={{ marginTop: '1rem' }}>Loading...</p>}
+      {error && <p style={{ color: 'red', marginTop: '1rem' }}>{error}</p>}
 
-      {results.length === 0 && !loading && location !== '' && !error && (
-        <p>No storage units found for: {location}</p>
+      {!loading && !error && results.length === 0 && location !== '' && (
+        <p style={{ marginTop: '1rem' }}>No storage units found for: {location}</p>
       )}
 
       {results.map((place, index) => (
         <div
           key={index}
           style={{
-            border: '1px solid #ccc',
-            padding: '1rem',
+            border: '1px solid #ddd',
             borderRadius: '10px',
+            padding: '1rem',
             marginTop: '1rem',
+            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
           }}
         >
           <h2>{place.name}</h2>
@@ -85,11 +104,3 @@ export default function App() {
             href={`https://www.google.com/maps/place/?q=place_id:${place.place_id}`}
             target="_blank"
             rel="noopener noreferrer"
-          >
-            View on Google Maps
-          </a>
-        </div>
-      ))}
-    </div>
-  );
-}

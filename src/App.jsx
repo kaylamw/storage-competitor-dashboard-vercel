@@ -30,7 +30,7 @@ export default function App() {
 
   return (
     <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem' }}>
-      <h1>Search Storage by ZIP</h1>
+      <h1>Search Storage Units by ZIP Code</h1>
       <input
         type="text"
         value={zip}
@@ -45,9 +45,13 @@ export default function App() {
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
 
-      {results.map((place, i) => (
+      {results.length === 0 && !loading && zip !== '' && !error && (
+        <p>No storage units found for ZIP {zip}</p>
+      )}
+
+      {results.map((place, index) => (
         <div
-          key={i}
+          key={index}
           style={{
             border: '1px solid #ccc',
             padding: '1rem',
@@ -56,12 +60,19 @@ export default function App() {
           }}
         >
           <h2>{place.name}</h2>
-          <p><strong>Rating:</strong> {place.rating} ({place.user_ratings_total} reviews)</p>
-          <p><strong>Address:</strong> {place.formatted_address}</p>
           <p>
-            <strong>Open Now:</strong>{' '}
-            {place.opening_hours?.open_now ? 'Yes' : 'No'}
+            <strong>Rating:</strong> {place.rating} ({place.user_ratings_total}{' '}
+            reviews)
           </p>
+          <p>
+            <strong>Address:</strong> {place.formatted_address}
+          </p>
+          {place.opening_hours && (
+            <p>
+              <strong>Open Now:</strong>{' '}
+              {place.opening_hours.open_now ? 'Yes' : 'No'}
+            </p>
+          )}
           <a
             href={`https://www.google.com/maps/place/?q=place_id:${place.place_id}`}
             target="_blank"

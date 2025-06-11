@@ -1,4 +1,6 @@
-export default async function handler(req, res) {
+const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+
+module.exports = async function handler(req, res) {
   const { zip } = req.query;
 
   try {
@@ -17,4 +19,4 @@ export default async function handler(req, res) {
     console.error('API fetch error:', error);
     res.status(500).json({ error: 'Server error' });
   }
-}
+};

@@ -1,6 +1,4 @@
-const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
-
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   const { zip } = req.query;
 
   if (!zip) {
@@ -15,12 +13,12 @@ module.exports = async function handler(req, res) {
     const data = await response.json();
 
     if (!data || !data.results) {
-      return res.status(500).json({ error: 'Invalid API response' });
+      return res.status(500).json({ error: 'Invalid response from Google' });
     }
 
     res.status(200).json(data.results);
   } catch (error) {
-    console.error('API error:', error);
+    console.error('Google API error:', error);
     res.status(500).json({ error: 'Server error' });
   }
-};
+}

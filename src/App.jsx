@@ -2,64 +2,75 @@ import { useState } from 'react';
 
 export default function App() {
   const [zip, setZip] = useState('');
-  const [competitors, setCompetitors] = useState([]);
+  const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState('');
 
-  const fetchCompetitors = async () => {
+  const fetchData = async () => {
     if (!zip) return;
     setLoading(true);
-    setError(null);
+    setError('');
+    setResults([]);
+
     try {
-      const res = await fetch(`/api/search?zip=${zip}`);
-      const data = await res.json();
-      setCompetitors(data);
+      const response = await fetch(`/api/search?zip=${zip}`);
+      const data = await response.json();
+
+      if (data.error) {
+        setError(data.error);
+      } else {
+        setResults(data);
+      }
     } catch (err) {
-      setError('Failed to fetch data.');
-      console.error(err);
+      setError('Failed to load data.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
+    <div style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem' }}>
+      <h1>Search Storage by ZIP</h1>
       <input
         type="text"
-        placeholder="Enter ZIP code..."
         value={zip}
         onChange={(e) => setZip(e.target.value)}
+        placeholder="Enter ZIP code..."
         style={{ width: '100%', padding: '0.5rem', marginBottom: '0.5rem' }}
       />
-      <button onClick={fetchCompetitors} style={{ marginBottom: '1rem' }}>
+      <button onClick={fetchData} style={{ padding: '0.5rem 1rem' }}>
         Search
       </button>
 
       {loading && <p>Loading...</p>}
       {error && <p style={{ color: 'red' }}>{error}</p>}
-      {competitors.length === 0 && !loading && !error && zip !== '' && (
-        <p>No results found for ZIP {zip}</p>
-      )}
 
-      {competitors.map((comp, i) => (
+      {results.map((place, i) => (
         <div
           key={i}
           style={{
             border: '1px solid #ccc',
-            borderRadius: '12px',
             padding: '1rem',
-            marginBottom: '1rem',
+            borderRadius: '10px',
+            marginTop: '1rem',
           }}
         >
-          <h2>{comp.name}</h2>
+          <h2>{place.name}</h2>
+          <p><strong>Rating:</strong> {place.rating} ({place.user_ratings_total} reviews)</p>
+          <p><strong>Address:</strong> {place.formatted_address}</p>
           <p>
-            <strong>Rating:</strong> {comp.rating}{' '}
-            ({comp.user_ratings_total} reviews)
+            <strong>Open Now:</strong>{' '}
+            {place.opening_hours?.open_now ? 'Yes' : 'No'}
           </p>
-          <p>
-            <strong>Address:</strong> {comp.formatted_address}
-          </p>
-          {comp.opening_hours && (
-            <p>
-              <strong>Open Now:</strong>{' '}
-              {comp.open
+          <a
+            href={`https://www.google.com/maps/place/?q=place_id:${place.place_id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            View on Google Maps
+          </a>
+        </div>
+      ))}
+    </div>
+  );
+}

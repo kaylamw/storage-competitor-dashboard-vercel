@@ -42,16 +42,24 @@ export default function App() {
       )}
 
       {competitors.map((comp, i) => (
-        <div key={i} style={{ border: '1px solid #ccc', borderRadius: '12px', padding: '1rem', marginBottom: '1rem' }}>
+        <div
+          key={i}
+          style={{
+            border: '1px solid #ccc',
+            borderRadius: '12px',
+            padding: '1rem',
+            marginBottom: '1rem',
+          }}
+        >
           <h2>{comp.name}</h2>
-          <p><strong>Rating:</strong> {comp.rating} ({comp.user_ratings_total} reviews)</p>
-          <p><strong>Address:</strong> {comp.formatted_address}</p>
-          <p><strong>Open Now:</strong> {comp.opening_hours?.open_now ? 'Yes' : 'No'}</p>
-          <a href={`https://www.google.com/maps/place/?q=place_id:${comp.place_id}`} target="_blank" rel="noopener noreferrer">
-            View on Google Maps
-          </a>
-        </div>
-      ))}
-    </div>
-  );
-}
+          <p>
+            <strong>Rating:</strong> {comp.rating}{' '}
+            ({comp.user_ratings_total} reviews)
+          </p>
+          <p>
+            <strong>Address:</strong> {comp.formatted_address}
+          </p>
+          {comp.opening_hours && (
+            <p>
+              <strong>Open Now:</strong>{' '}
+              {comp.open

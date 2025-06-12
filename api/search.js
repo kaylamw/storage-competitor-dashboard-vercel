@@ -32,14 +32,14 @@ export default async function handler(req, res) {
     res.status(500).json({ error: 'Something went wrong.' });
   }
 }
-✅ Place this in: /api/search.js
+//✅ Place this in: /api/search.js
 
-✅ src/Search.jsx — (Frontend UI Component)
-This is what you interact with on the page. It calls /api/search.
+//✅ src/Search.jsx — (Frontend UI Component)
+//This is what you interact with on the page. It calls /api/search.
 
-jsx
-Copy
-Edit
+//jsx
+//Copy
+//Edit
 import { useState } from 'react';
 
 export default function Search({ onResults }) {

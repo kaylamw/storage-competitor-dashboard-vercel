@@ -1,3 +1,4 @@
+
 export default async function handler(req, res) {
   const { location } = req.query;
   const apiKey = process.env.GOOGLE_MAPS_API_KEY;
@@ -24,52 +25,11 @@ export default async function handler(req, res) {
         formatted_address: place.vicinity,
         rating: place.rating,
         user_ratings_total: place.user_ratings_total,
-        place_id: place.place_id,
+        place_id: place.place_id
       }))
     );
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Something went wrong.' });
   }
-}
-//✅ Place this in: /api/search.js
-
-//✅ src/Search.jsx — (Frontend UI Component)
-//This is what you interact with on the page. It calls /api/search.
-
-//jsx
-//Copy
-//Edit
-import { useState } from 'react';
-
-export default function Search({ onResults }) {
-  const [location, setLocation] = useState('');
-  const [loading, setLoading] = useState(false);
-
-  const handleSearch = async () => {
-    if (!location) return;
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/search?location=${encodeURIComponent(location)}`);
-      const data = await res.json();
-      onResults(data);
-    } catch (err) {
-      console.error('Search error:', err);
-      onResults([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div>
-      <input
-        type="text"
-        placeholder="Enter city, state, zip, or address"
-        value={location}
-        onChange={(e) => setLocation(e.target.value)}
-      />
-      <button onClick={handleSearch}>{loading ? 'Searching...' : 'Search'}</button>
-    </div>
-  );
 }

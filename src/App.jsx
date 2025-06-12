@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import Search from './Search';
 
@@ -14,8 +15,7 @@ function App() {
           <li key={place.place_id} style={{ marginBottom: '1rem' }}>
             <strong>{place.name}</strong><br />
             {place.formatted_address}<br />
-            ⭐ {place.rating} ({place.user_ratings_total} reviews)<br />
-            📍 {place.distance_miles.toFixed(2)} miles
+            ⭐ {place.rating} ({place.user_ratings_total} reviews)
           </li>
         ))}
       </ul>

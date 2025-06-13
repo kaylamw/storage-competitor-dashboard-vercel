@@ -1,10 +1,9 @@
-
 export default async function handler(req, res) {
   const { location } = req.query;
   const apiKey = process.env.GOOGLE_MAPS_API_KEY;
 
   if (!location || !apiKey) {
-    return res.status(400).json({ error: 'Missing location or API key' });
+    return res.status(400).json({ error: "Missing location or API key" });
   }
 
   try {
@@ -12,6 +11,10 @@ export default async function handler(req, res) {
       `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(location)}&key=${apiKey}`
     );
     const geoData = await geoRes.json();
+    if (!geoData.results || geoData.results.length === 0) {
+      return res.status(404).json({ error: "Location not found" });
+    }
+
     const { lat, lng } = geoData.results[0].geometry.location;
 
     const placesRes = await fetch(
@@ -29,7 +32,7 @@ export default async function handler(req, res) {
       }))
     );
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Something went wrong.' });
+    console.error("API Error:", err);
+    res.status(500).json({ error: "Google API error" });
   }
 }
